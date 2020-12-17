@@ -1,13 +1,12 @@
 package ru.dadynsky.demo.dao;
 
 import com.google.gson.JsonObject;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import ru.dadynsky.demo.dao.mapper.ItemMapper;
-
 import ru.dadynsky.demo.entity.Item;
 
-import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +15,13 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public class ItemDao extends BaseJdbcTemplateDao implements IItemDao {
+public class ItemDao implements IItemDao {
+    private final JdbcTemplate jdbcTemplate;
 
     private final ItemMapper itemMapper;
 
-    protected ItemDao(DataSource dataSource, ItemMapper itemMapper) {
-        super(dataSource);
+    protected ItemDao(JdbcTemplate jdbcTemplate, ItemMapper itemMapper) {
+        this.jdbcTemplate = jdbcTemplate;
         this.itemMapper = itemMapper;
     }
 
@@ -66,12 +66,12 @@ public class ItemDao extends BaseJdbcTemplateDao implements IItemDao {
             params.add(offset);
         }
 
-        return getJdbcTemplate()
+        return jdbcTemplate
                 .query(query, params.toArray(), itemMapper);
     }
 
     public Optional<Item> getItem(Integer id) {
-        return getJdbcTemplate()
+        return jdbcTemplate
                 .query("select * from item where id = ?", new Object[]{id}, itemMapper)
                 .stream()
                 .findAny();
@@ -102,6 +102,6 @@ public class ItemDao extends BaseJdbcTemplateDao implements IItemDao {
         params.add(item.getTypeId());
         params.add(item.getSerial());
 
-        getJdbcTemplate().update("insert into item (owner_id,create_date,type, serial) values (?,?,?,?)", params.toArray());
+        jdbcTemplate.update("insert into item (owner_id,create_date,type, serial) values (?,?,?,?)", params.toArray());
     }
 }

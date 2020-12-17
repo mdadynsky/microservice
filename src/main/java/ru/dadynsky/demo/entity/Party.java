@@ -1,12 +1,12 @@
 package ru.dadynsky.demo.entity;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Party {
     @Getter
