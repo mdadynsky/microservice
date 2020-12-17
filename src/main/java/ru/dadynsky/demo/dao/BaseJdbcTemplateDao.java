@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 
@@ -15,7 +14,6 @@ public abstract class BaseJdbcTemplateDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     protected BaseJdbcTemplateDao(DataSource dataSource) {
-        Assert.notNull(dataSource, "dataSource should not be null");
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 

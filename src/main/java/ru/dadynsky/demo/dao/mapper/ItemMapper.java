@@ -2,17 +2,19 @@ package ru.dadynsky.demo.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.dadynsky.demo.dao.PartyDao;
+import ru.dadynsky.demo.dao.IPartyDao;
 import ru.dadynsky.demo.entity.Item;
+import ru.dadynsky.demo.entity.Party;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Component
 public class ItemMapper implements RowMapper<Item> {
-    private PartyDao partyDao;
+    private final IPartyDao partyDao;
 
-    public ItemMapper(PartyDao partyDao) {
+    public ItemMapper(IPartyDao partyDao) {
         this.partyDao = partyDao;
     }
 
@@ -26,11 +28,10 @@ public class ItemMapper implements RowMapper<Item> {
         item.setTypeId(resultSet.getInt("type"));
         item.setChildrenCount(resultSet.getInt("children_count"));
 
-        if (item.getOwnerId() != null)
-            item.setOwner(
-                    partyDao.getParty(item.getOwnerId())
-            );
-
+        if (item.getOwnerId() != null) {
+            Optional<Party> optionalParty = partyDao.getParty(item.getOwnerId());
+            optionalParty.ifPresent(item::setOwner);
+        }
         return item;
     }
 

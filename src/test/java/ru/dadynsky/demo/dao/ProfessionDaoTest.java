@@ -14,7 +14,7 @@ public class ProfessionDaoTest {
 
 
     @Test
-    void findByIdTest(){
+    void findByIdTest() {
 
     }
 }

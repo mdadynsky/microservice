@@ -9,43 +9,36 @@ import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
-public class PartyDao extends BaseJdbcTemplateDao {
+public class PartyDao extends BaseJdbcTemplateDao implements IPartyDao {
 
-    protected PartyDao(DataSource dataSource) {
+    private final PartyMapper partyMapper;
+
+    protected PartyDao(DataSource dataSource, PartyMapper partyMapper) {
         super(dataSource);
+        this.partyMapper = partyMapper;
     }
 
-    public List<Party> getParties(){
-        return this.getJdbcTemplate().query("select * from party", new Party[] {},
-                (resultSet, rowNum) ->{
-
-                    Party party = new Party();
-                    party.setId(resultSet.getInt("id"));
-                    party.setName(resultSet.getString("name"));
-                    return party;
-
-                });
+    public List<Party> getParties() {
+        return getJdbcTemplate().query("select * from party", partyMapper);
     }
 
-    public Party getParty(Integer id){
-        List<Party> list = this.getJdbcTemplate()
-                .query("select * from party where id = ?", new Object[]{id}, new PartyMapper() );
-
-        if (list.size()==0)
-            return null;
-
-        return list.get(0);
+    public Optional<Party> getParty(Integer id) {
+        return getJdbcTemplate()
+                .query("select * from party where id = ?", new Object[]{id}, partyMapper)
+                .stream()
+                .findAny();
     }
 
-    public void save(Party party){
-        List params = new ArrayList();
+    public void save(Party party) {
+        List<Object> params = new ArrayList<>();
         params.add(party.getName());
         params.add(party.getCreateDate());
         params.add(party.getVersion());
 
-        this.getJdbcTemplate().update("insert into party (name,create_date,version) values (?,?,?)", params.toArray());
+        getJdbcTemplate().update("insert into party (name,create_date,version) values (?,?,?)", params.toArray());
     }
 }

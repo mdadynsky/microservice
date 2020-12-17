@@ -1,11 +1,13 @@
 package ru.dadynsky.demo.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ru.dadynsky.demo.entity.Party;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class PartyMapper implements RowMapper<Party> {
 
     @Override

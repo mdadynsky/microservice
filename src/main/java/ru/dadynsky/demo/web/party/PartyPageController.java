@@ -9,7 +9,7 @@ public class PartyPageController {
 
     @GetMapping(value = "/partyPage/open")
     @ResponseBody
-    public String getParties(){
+    public String getParties() {
         return "1";
     }
 }
