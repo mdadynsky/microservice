@@ -39,7 +39,7 @@ public class ItemDao implements IItemDao {
 
     public List<Item> getItems(String serialNumber, Integer limit, Integer offset, Integer parentId, Integer ownerId) {
         String query = "select * from item where 1=1 ";
-        List params = new ArrayList();
+        List<Object> params = new ArrayList();
 
         if (!StringUtils.isEmpty(serialNumber)) {
             query += " and serial=? ";

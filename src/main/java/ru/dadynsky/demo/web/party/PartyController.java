@@ -13,13 +13,9 @@ import ru.dadynsky.demo.service.IPartyService;
 @Controller
 public class PartyController {
     private final IPartyService partyService;
-    private final IPartyDao partyDao;
-    private final IItemDao itemDao;
 
-    public PartyController(IPartyService partyService, IPartyDao partyDao, IItemDao itemDao) {
+    public PartyController(IPartyService partyService) {
         this.partyService = partyService;
-        this.partyDao = partyDao;
-        this.itemDao = itemDao;
     }
 
     @GetMapping(value = "/party")
